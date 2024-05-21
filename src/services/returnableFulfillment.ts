@@ -1,27 +1,6 @@
-// services/shopifyService.ts
-import {shopifyFetch, ShopifyFetchOptions} from '../utilities/shopifyFetch';
+import { shopifyFetch } from '@/utilities/shopifyFetch';
 
-
-interface ReturnableFulfillmentResponse {
-  returnableFulfillments: {
-    edges: Array<{
-      node: {
-        id: string;
-        fulfillment: { id: string };
-        returnableFulfillmentLineItems: {
-          edges: Array<{
-            node: {
-              fulfillmentLineItem: { id: string };
-              quantity: number;
-            };
-          }>;
-        };
-      };
-    }>;
-  };
-}
-
-export async function getReturnableFulfillments(orderId: string): Promise<ReturnableFulfillmentResponse> {
+export async function getReturnableFulfillments(orderId: string) {
   const query = `
     query returnableFulfillmentsQuery($orderId: ID!) {
       returnableFulfillments(orderId: $orderId, first: 10) {
@@ -29,12 +8,23 @@ export async function getReturnableFulfillments(orderId: string): Promise<Return
           node {
             id
             fulfillment {
+              totalQuantity
               id
+              status
             }
             returnableFulfillmentLineItems(first: 10) {
               edges {
                 node {
                   fulfillmentLineItem {
+                    lineItem{
+                      name
+                      id
+                      vendor
+                      product{
+                        id
+                        isGiftCard
+                      }
+                    }
                     id
                   }
                   quantity
@@ -47,20 +37,6 @@ export async function getReturnableFulfillments(orderId: string): Promise<Return
     }
   `;
 
-  const variables = {
-    orderId: `gid://shopify/Order/${orderId}`,
-  };
-
-  const options: ShopifyFetchOptions = {
-    query,
-    variables,
-  };
-
-  try {
-    const data: ReturnableFulfillmentResponse = await shopifyFetch<ReturnableFulfillmentResponse>(options);
-    return data;
-  } catch (error:any) {
-    console.error('GraphQL Error:', error);
-    throw new Error(`Failed to fetch returnable fulfillments for order ${orderId}: ${error.message}`);
-  }
+  const variables = { orderId: `gid://shopify/Order/${orderId}` };
+  return await shopifyFetch({ query, variables });
 }

@@ -12,11 +12,28 @@ interface RetrieveReturnResponse {
     const query = `
       query returnQuery($id: ID!) {
         return(id: $id) {
-          id
+          status
+          name
           order {
             id
           }
-          status
+          returnLineItems(first: 10) {
+            edges {
+              node {
+                quantity
+                returnReason
+                returnReasonNote
+                fulfillmentLineItem {
+                  lineItem {
+                    name
+                  }
+                }
+                totalWeight {
+                  value
+                }
+              }
+            }
+          }
         }
       }
     `;
@@ -31,7 +48,7 @@ interface RetrieveReturnResponse {
     };
   
     try {
-      const data: RetrieveReturnResponse = await shopifyFetch<RetrieveReturnResponse>(options);
+      const data: RetrieveReturnResponse = await shopifyFetch(options);
       return data;
     } catch (error:any) {
       console.error('GraphQL Error:', error);

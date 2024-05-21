@@ -23,7 +23,6 @@ function formatShopifyGID(productId: string): string {
   return `gid://shopify/Product/${productId}`;
 }
 
-// Example usage in your getProductById function
 export async function getProductById(productId: string): Promise<ProductDetails> {
   const formattedProductId = formatShopifyGID(productId);
 
