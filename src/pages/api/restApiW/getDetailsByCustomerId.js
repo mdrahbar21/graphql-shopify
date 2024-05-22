@@ -23,6 +23,9 @@ export default async function handler(req, res) {
   
       // const data = await response.json();
       // res.status(200).json(data);
+      // return response.json;
+      // const data =response.json();
+      // return data;
       const { customer } = await response.json();
       const customerData = {
         name: `${customer.first_name} ${customer.last_name}`,
