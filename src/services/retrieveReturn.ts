@@ -24,8 +24,12 @@ interface RetrieveReturnResponse {
                 returnReason
                 returnReasonNote
                 fulfillmentLineItem {
+                  id
+                  quantity
                   lineItem {
+                    id
                     name
+                    quantity
                   }
                 }
                 totalWeight {

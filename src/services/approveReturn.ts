@@ -33,7 +33,7 @@ interface ApproveReturnResponse {
     };
   
     try {
-      const data: ApproveReturnResponse = await shopifyFetch<ApproveReturnResponse>(options);
+      const data: ApproveReturnResponse = await shopifyFetch(options);
       if (data.returnApproveRequest.userErrors && data.returnApproveRequest.userErrors.length > 0) {
         throw new Error(data.returnApproveRequest.userErrors.map(error => error.message).join(', '));
       }

@@ -46,6 +46,9 @@ export async function cancelReturn(returnId, notifyCustomer = false) {
         id: `gid://shopify/Return/${returnId}`,
         notifyCustomer: notifyCustomer
     };
+    const data = await shopifyMutate1(mutation, variables);
+    return data.returnCancel;
+
 
     try {
         const data = await shopifyMutate1(mutation, variables);

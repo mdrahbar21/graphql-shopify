@@ -1,4 +1,5 @@
 export async function shopifyFetch1({ query, variables }) {
+  console.log('called ShopifyFetch1');
     const endpoint = process.env.SHOPIFY_STORE_DOMAIN;
     const headers = {
       'Content-Type': 'application/json',
