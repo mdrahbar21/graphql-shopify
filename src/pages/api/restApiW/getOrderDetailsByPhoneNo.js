@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default async function handler(req:any, res:any) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).end('Method Not Allowed');
   }
@@ -31,28 +31,39 @@ export default async function handler(req:any, res:any) {
     });
     const orders = ordersResponse.data.orders;
 
-    // Process and return order details
-    const filteredOrders = orders.map((order:any) => {
-      const formatAddress = (address:any) => {
-        return [address.address1, address.address2, address.city, address.province, address.country, address.zip]
-          .filter(part => part) 
-          .join(', ');
-      };
+    // Determine the category
+    let orderCategory = '';
+    if (orders.length === 1) {
+      orderCategory = orders[0].line_items.length === 1 ? 'single order single product' : 'single order multiple product';
+    } else {
+      orderCategory = 'multiple order multiple product';
+    }
 
-      return {
-        id: order.id,
-        customer_name: `${customer.first_name} ${customer.last_name}`,
-        phone: customer.phone,
-        default_address: formatAddress(customer.default_address),
-        billing_address: formatAddress(order.billing_address),
-        line_items: order.line_items.map((item:any) => ({
-          product_id: item.product_id,
-          name: item.name
-        }))
-      };
-    });
+    const filteredOrders = orders.map(order => ({
+      id: order.id,
+      customer_name: `${customer.first_name} ${customer.last_name}`,
+      phone: customer.phone,
+      default_address: formatAddress(customer.default_address),
+      billing_address: formatAddress(order.billing_address),
+      line_items: order.line_items.map(item => ({
+        product_id: item.product_id,
+        name: item.name,
+        quantity: item.quantity
+      }))
+    }));
 
-    return res.status(200).json({ orders: filteredOrders });
+    function formatAddress(address) {
+      return [address.address1, address.address2, address.city, address.province, address.country, address.zip]
+        .filter(part => part)
+        .join(', ');
+    }
+
+    const response = {
+      category: orderCategory,
+      orders: filteredOrders
+    };
+
+    return res.status(200).json(response);
 
   } catch (error) {
     console.error('Shopify API error:', error);

@@ -21,7 +21,18 @@ export default async function handler(req, res) {
       },
     });
 
-    res.status(200).json(response.data);
+    const orderDetails = response.data.order;
+    const productCount = orderDetails.line_items.length;
+    const orderType = productCount === 1 ? 'single product' : 'multiple products';
+
+    const extendedResponse = {
+      ...orderDetails,
+      orderType: orderType,
+      productCount: productCount
+    };
+    
+
+    res.status(200).json(extendedResponse);
   } catch (error) {
     console.error('Error fetching order from Shopify:', error);
     res.status(error.response?.status || 500).json({ error: 'Failed to fetch order data' });
