@@ -1,5 +1,5 @@
 // const shopUrl = process.env.SHOPIFY_SHOP_URL;
-const shopUrl='https://hoomanlab.myshopify.com';
+const shopUrl=process.env.SHOPIFY_SHOP_URL;
 const accessToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
 
 export async function getOrdersByPhone(phoneNumber) {
