@@ -37,7 +37,7 @@ interface DeclineReturnResponse {
     };
   
     try {
-      const data: DeclineReturnResponse = await shopifyFetch<DeclineReturnResponse>(options);
+      const data: DeclineReturnResponse = await shopifyFetch(options);
       if (data.returnDeclineRequest.userErrors && data.returnDeclineRequest.userErrors.length > 0) {
         throw new Error(data.returnDeclineRequest.userErrors.map(error => error.message).join(', '));
       }

@@ -52,7 +52,7 @@ export async function returnProductAndInitiateRefund(orderId: string, lineItems:
   };
 
   try {
-    const data: RefundResponse = await shopifyFetch<RefundResponse>(options);
+    const data: RefundResponse = await shopifyFetch(options);
     if (data.refundCreate.userErrors && data.refundCreate.userErrors.length > 0) {
       throw new Error(data.refundCreate.userErrors.map((error:any) => error.message).join(', '));
     }

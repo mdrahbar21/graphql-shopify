@@ -32,7 +32,7 @@ interface ReopenReturnResponse {
     };
   
     try {
-      const data: ReopenReturnResponse = await shopifyFetch<ReopenReturnResponse>(options);
+      const data: ReopenReturnResponse = await shopifyFetch(options);
       if (data.returnReopen.userErrors && data.returnReopen.userErrors.length > 0) {
         throw new Error(data.returnReopen.userErrors.map(error => error.message).join(', '));
       }

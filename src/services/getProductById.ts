@@ -51,7 +51,7 @@ export async function getProductById(productId: string): Promise<ProductDetails>
   };
 
   try {
-    const { product }: ProductResponse = await shopifyFetch<ProductResponse>(options);
+    const { product }: ProductResponse = await shopifyFetch(options);
     return product;
   } catch (error) {
     console.error('GraphQL Error:', error);
