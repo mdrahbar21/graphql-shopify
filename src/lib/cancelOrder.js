@@ -1,3 +1,4 @@
+"use client"
 
 export async function cancelOrder(orderId) {
     const shopUrl = process.env.SHOPIFY_SHOP_URL;

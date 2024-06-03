@@ -52,7 +52,8 @@ export default async function processReturnRequest(req:NextApiRequest, res: Next
         };
 
         const data = await shopifyMutate1(mutation, variables);
-        return res.status(200).json({ success: true, data });
+        const ans=JSON.stringify(data);
+        return res.status(200).json({ success: true, ans });
     } catch (error:any) {
         console.error("Return request failed:", error);
         return res.status(500).json({ success: false, error: error.message });
