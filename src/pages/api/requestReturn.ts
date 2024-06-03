@@ -1,13 +1,15 @@
 import { shopifyMutate1 } from '@/utilities/shopifyMutate1';
 import { getReturnableFulfillments } from '@/services/returnableFulfillment';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function processReturnRequest(orderId, returnReason, customerNote) {
-    try {
+export default async function processReturnRequest(req:NextApiRequest, res: NextApiResponse) {
+  try {
+        const {orderId, returnReason, customerNote}: {orderId: any, returnReason: any, customerNote?: string} = req.body;
         const fulfillmentsData = await getReturnableFulfillments(orderId);
-        const returnLineItems = [];
+        const returnLineItems:any = [];
 
-        fulfillmentsData.data.returnableFulfillments.edges.forEach(fulfillment => {
-            fulfillment.node.returnableFulfillmentLineItems.edges.forEach(item => {
+        fulfillmentsData.data.returnableFulfillments.edges.forEach((fulfillment:any) => {
+            fulfillment.node.returnableFulfillmentLineItems.edges.forEach((item:any) => {
                 returnLineItems.push({
                     fulfillmentLineItemId: item.node.fulfillmentLineItem.id,
                     quantity: item.node.quantity,
@@ -50,10 +52,10 @@ export default async function processReturnRequest(orderId, returnReason, custom
         };
 
         const data = await shopifyMutate1(mutation, variables);
-        return { success: true, data };
-    } catch (error) {
+        return res.status(200).json({ success: true, data });
+    } catch (error:any) {
         console.error("Return request failed:", error);
-        return { success: false, error: error.message };
+        return res.status(500).json({ success: false, error: error.message });
     }
 }
 
