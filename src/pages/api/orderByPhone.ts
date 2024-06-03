@@ -16,7 +16,10 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     console.log('phoneNumber: ' + phoneNumber);
 
     if (!phoneNumber) {
-      return res.status(400).send('PhoneNumber is required and must be a valid string.');
+    //   return res.status(400).send('PhoneNumber is required and must be a valid string.');
+      return res.status(400).json({ success: false, message: 'PhoneNumber is required and must be a valid string.' });
+
+      
     }
 
     const customersUrl: string = `${shopUrl}/admin/api/2024-04/customers.json?phone=+91${phoneNumber}`;
@@ -28,12 +31,15 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!customerResponse.ok) {
-      return res.status(customerResponse.status).send('Failed to fetch customers');
+    //   return res.status(customerResponse.status).send('Failed to fetch customers');
+      return res.status(customerResponse.status).json({ success: false, message: 'Failed to fetch customers' });
+
     }
 
     const customerData = await customerResponse.json();
     if (customerData.customers.length === 0) {
-      return res.status(404).send('Customer not found');
+    //   return res.status(404).send('Customer not found');
+      return res.status(404).json({ success: false, message: 'Customer not found' });      
     }
 
     const customer = customerData.customers[0];
@@ -47,7 +53,8 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!ordersResponse.ok) {
-      return res.status(ordersResponse.status).send('Failed to fetch orders');
+    //   return res.status(ordersResponse.status).send('Failed to fetch orders');
+      return res.status(ordersResponse.status).json({ success: false, message: 'Failed to fetch orders' });
     }
 
     const ordersData = await ordersResponse.json();
@@ -79,6 +86,9 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
 
   } catch (error:any) {
     console.error('Shopify API error:', error);
-    return res.status(500).send('Failed to process request ' + error.toString());
+    // return res.status(500).send('Failed to process request ' + error.toString());
+    return res.status(500).json({ success: true, message: 'Failed to process request ' + error.toString() });
+
+    
   }
 }
