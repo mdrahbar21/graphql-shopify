@@ -2,6 +2,8 @@
 
 export default async function POST(req, res) {
     try {
+        const shopUrl=process.env.SHOPIFY_SHOP_URL;
+        const accessToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
         const body = req.body || await req.json() || {}; 
         const phoneNumber = body.phoneNum ? body.phoneNum.toString() : ''; 
         if (!phoneNumber) {
