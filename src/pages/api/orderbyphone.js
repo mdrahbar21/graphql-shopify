@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+export default async function POST(req,res) {
   try {
       const shopUrl = process.env.SHOPIFY_SHOP_URL;
       const accessToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
@@ -7,6 +7,7 @@ export default async function handler(req, res) {
       console.log('phoneNumber: ' + phoneNumber);
 
       if (!phoneNumber) {
+        // return {success: false, status:400, message:'PhoneNumber is required and must be a valid string.' };
           return res.status(400).send('PhoneNumber is required and must be a valid string.');
       }
 
@@ -20,11 +21,15 @@ export default async function handler(req, res) {
 
       if (!customerResponse.ok) {
           return res.status(customerResponse.status).send('Failed to fetch customers');
+          // return {success: false, status:customerResponse.status, message:'Failed to fetch customers.' };
+
       }
 
       const customerData = await customerResponse.json();
       if (customerData.customers.length === 0) {
           return res.status(404).send('Customer not found');
+          // return {success: false, status:404, message:'Customer not found' };
+
       }
 
       const customer = customerData.customers[0];
@@ -39,6 +44,8 @@ export default async function handler(req, res) {
 
       if (!ordersResponse.ok) {
           return res.status(ordersResponse.status).send('Failed to fetch orders');
+          // return {success: false, status:ordersResponse.status, message:'Failed to fetch orders' };
+
       }
 
       const ordersData = await ordersResponse.json();
@@ -68,7 +75,10 @@ export default async function handler(req, res) {
       }
 
       let responseString = `${orderCategory}, ${'\n'}orders: [${JSON.stringify(filteredOrders)}]`;
-      return res.status(200).send(responseString);
+      
+      // return {success: true, status:200, message:responseString };
+      const ans=JSON.stringify(responseString)
+      return res.status(200).send(ans);
 
   } catch (error) {
       console.error('Shopify API error:', error);
