@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 
   try {
     // Fetch customers by phone number
-    const customersUrl = `${shopUrl}/admin/api/2024-04/customers.json?phone=${phoneNum}`;
+    const customersUrl = `${shopUrl}/admin/api/2024-04/customers.json?phone=+91${phoneNum}`;
     const customerResponse = await axios.get(customersUrl, {
       headers: { 'X-Shopify-Access-Token': accessToken },
     });
