@@ -32,7 +32,7 @@ interface CloseReturnResponse {
     };
   
     try {
-      const data: CloseReturnResponse = await shopifyFetch<CloseReturnResponse>(options);
+      const data: CloseReturnResponse = await shopifyFetch(options);
       if (data.returnClose.userErrors && data.returnClose.userErrors.length > 0) {
         throw new Error(data.returnClose.userErrors.map(error => error.message).join(', '));
       }

@@ -13,9 +13,6 @@ export interface ShopifyFetchResponse<T> {
     }>;
 }
 
-  
-  
-
 export async function shopifyFetch({ query, variables }: ShopifyFetchOptions) {
   const endpoint=process.env.SHOPIFY_STORE_DOMAIN;
   const headers = new Headers();
