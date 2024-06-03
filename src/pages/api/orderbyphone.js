@@ -1,7 +1,5 @@
 import { POST } from "@/lib/OrderByPhone";
 
-import { fetchCustomerOrders } from '../../lib/shopify';
-
 export default async function handler(req, res) {
     try {
         const body = req.body || await req.json() || {}; 
