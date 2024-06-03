@@ -1,4 +1,4 @@
-import { POST } from "@/internalServerFunctions/OrderByPhone";
+import { POST } from "@/lib/OrderByPhone";
 
 export default async function handler(req, res) {
 
