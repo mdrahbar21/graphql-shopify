@@ -4,13 +4,14 @@ export default async function handler(req, res) {
       const accessToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
       const body = req.body || {};  // If your setup does not parse JSON by default, ensure this is handled correctly
       const phoneNumber = body.phoneNum ? body.phoneNum.toString() : ''; 
+      console.log('phoneNumber: ' + phoneNumber);
 
       if (!phoneNumber) {
           // Return HTTP response with error
           return res.status(400).json({ error: 'PhoneNumber is required and must be a valid string.' });
       }
 
-      const customersUrl = `${shopUrl}/admin/api/2024-04/customers.json?phone=${phoneNumber}`;
+      const customersUrl = `${shopUrl}/admin/api/2024-04/customers.json?phone=+91${phoneNumber}`;
       const customerResponse = await fetch(customersUrl, {
           headers: {
             'X-Shopify-Access-Token': accessToken,
