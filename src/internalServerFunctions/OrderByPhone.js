@@ -2,7 +2,7 @@
 const shopUrl=process.env.SHOPIFY_SHOP_URL;
 const accessToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
 
-export async function getOrdersByPhone(phoneNumber) {
+export async function POST(phoneNumber) {
   try {
     // Fetch customers by phone number
     const customersUrl = `${shopUrl}/admin/api/2024-04/customers.json?phone=${phoneNumber}`;

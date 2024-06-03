@@ -1,17 +1,14 @@
 import axios from 'axios';
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).end('Method Not Allowed');
-  }
+export default async function POST(phoneNumber) {
 
-  const { phoneNum } = req.json().phoneNum; 
+//   const { phoneNumber } = req.body; 
   const shopUrl = 'https://hoomanlab.myshopify.com';
   const accessToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
 
   try {
     // Fetch customers by phone number
-    const customersUrl = `${shopUrl}/admin/api/2024-04/customers.json?phone=${phoneNum}`;
+    const customersUrl = `${shopUrl}/admin/api/2024-04/customers.json?phone=${phoneNumber}`;
     const customerResponse = await axios.get(customersUrl, {
       headers: { 'X-Shopify-Access-Token': accessToken },
     });
