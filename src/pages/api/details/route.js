@@ -1,9 +1,9 @@
 import { getDetails } from "@/services/getDetails";
 
 export default async function handler(req, res) {
-    if (req.method !== 'GET') {
-        return res.status(405).end('Method Not Allowed');
-    }
+    // if (req.method !== 'GET') {
+    //     return res.status(405).end('Method Not Allowed');
+    // }
     
     const { orderId } = req.query;
     
