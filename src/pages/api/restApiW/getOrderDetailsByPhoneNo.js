@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     return res.status(405).end('Method Not Allowed');
   }
 
-  const { phoneNum } = req.json().phoneNum; 
+  const { phoneNum } = req.body; 
   const shopUrl = 'https://hoomanlab.myshopify.com';
   const accessToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
 
