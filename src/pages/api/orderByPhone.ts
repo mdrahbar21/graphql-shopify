@@ -1,4 +1,3 @@
-// Import necessary types
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 
