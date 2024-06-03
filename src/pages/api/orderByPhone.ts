@@ -79,10 +79,9 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
 
     
 
-    let responseString = `${orderCategory}, ${'\n'}orders: [${JSON.stringify(filteredOrders)}]`;
-
-    // Correctly send a JSON response with the formatted string
-    return res.status(200).json({ success: true, message: responseString });
+    let responseString = `${orderCategory}, orders: ${JSON.stringify(filteredOrders)}`;
+    const ans=JSON.stringify(responseString);
+    return res.status(200).json({ success: true, message: ans });
 
   } catch (error:any) {
     console.error('Shopify API error:', error);

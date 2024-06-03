@@ -9,9 +9,10 @@ export default async function handler(req, res) {
     
     try {
         const data = await getDetails(orderId);
-        res.status(200).json(data);
+        const ans= JSON.stringify(data)
+        return res.status(200).json({success: true, message: ans});
     } catch (error) {
         console.error('Error fetching order details:', error);
-        res.status(500).json({ error: 'Failed to fetch order details' });
+        return res.status(500).json({ success:false, message: 'Failed to fetch order details' });
     }
 }
