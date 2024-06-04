@@ -44,7 +44,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
 
     const customer = customerData.customers[0];
 
-    const ordersUrl: string = `${shopUrl}/admin/api/2024-04/orders.json?customer_id=${customer.id}`;
+    const ordersUrl: string = `${shopUrl}/admin/api/2024-04/orders.json?customer_id=${customer.id}&status=any`;
     const ordersResponse = await fetch(ordersUrl, {
       headers: {
         'X-Shopify-Access-Token': accessToken,
