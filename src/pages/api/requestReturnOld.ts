@@ -7,11 +7,12 @@ import { shopifyFetch } from '@/utilities/shopifyFetch';
 export default async function POST(req:NextApiRequest, res: NextApiResponse) {
   try {
         const body = req.body || {};
-        const {orderId}: {orderId: any} = body.orderId? body.orderId.toString(): '';
+        const {orderId}: {orderId: any} = body.orderId;
         const {reason}: {reason: any} = body.reason? body.reason.toString(): '';
         const {custNote}: {custNote: any} = body.custNote? body.custNote.toString(): '';
         const fulfillmentsData = await getReturnableFulfillments(orderId);
         const returnLineItems:any = [];
+        console.log(orderId+' '+reason+' '+custNote+' '+JSON.stringify(fulfillmentsData));
 
         fulfillmentsData.data.returnableFulfillments.edges.forEach((fulfillment:any) => {
             fulfillment.node.returnableFulfillmentLineItems.edges.forEach((item:any) => {
@@ -58,6 +59,7 @@ export default async function POST(req:NextApiRequest, res: NextApiResponse) {
 
         const data = await shopifyMutate1(mutation, variables);
         const ans=JSON.stringify(data);
+        // console.log(ans);
         return res.status(200).json({ success: true, message: ans });
     } catch (error:any) {
         console.error("Return request failed:", error);
@@ -65,7 +67,7 @@ export default async function POST(req:NextApiRequest, res: NextApiResponse) {
     }
 }
 
-async function getReturnableFulfillments(orderId: string) {
+async function getReturnableFulfillments(orderId: any) {
   const query = `
     query returnableFulfillmentsQuery($orderId: ID!) {
       returnableFulfillments(orderId: $orderId, first: 10) {
