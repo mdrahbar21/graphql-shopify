@@ -1,8 +1,10 @@
 import { shopifyMutate1 } from '@/utilities/shopifyMutate1';
-import { getReturnableFulfillments } from '@/services/returnableFulfillment';
+// import { getReturnableFulfillments } from '@/services/returnableFulfillment';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { shopifyFetch } from '@/utilities/shopifyFetch';
 
-export default async function processReturnRequest(req:NextApiRequest, res: NextApiResponse) {
+
+export default async function POST(req:NextApiRequest, res: NextApiResponse) {
   try {
         const {orderId, returnReason, customerNote}: {orderId: any, returnReason: any, customerNote?: string} = req.body;
         const fulfillmentsData = await getReturnableFulfillments(orderId);
@@ -53,10 +55,51 @@ export default async function processReturnRequest(req:NextApiRequest, res: Next
 
         const data = await shopifyMutate1(mutation, variables);
         const ans=JSON.stringify(data);
-        return res.status(200).json({ success: true, ans });
+        return res.status(200).json({ success: true, message: ans });
     } catch (error:any) {
         console.error("Return request failed:", error);
-        return res.status(500).json({ success: false, error: error.message });
+        return res.status(500).json({ success: false, message: error.message });
     }
+}
+
+async function getReturnableFulfillments(orderId: string) {
+  const query = `
+    query returnableFulfillmentsQuery($orderId: ID!) {
+      returnableFulfillments(orderId: $orderId, first: 10) {
+        edges {
+          node {
+            id
+            fulfillment {
+              totalQuantity
+              id
+              status
+            }
+            returnableFulfillmentLineItems(first: 10) {
+              edges {
+                node {
+                  fulfillmentLineItem {
+                    lineItem{
+                      name
+                      id
+                      vendor
+                      product{
+                        id
+                        isGiftCard
+                      }
+                    }
+                    id
+                  }
+                  quantity
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const variables = { orderId: `gid://shopify/Order/${orderId}` };
+  return await shopifyFetch({ query, variables });
 }
 
