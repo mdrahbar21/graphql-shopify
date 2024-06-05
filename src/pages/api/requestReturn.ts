@@ -6,7 +6,10 @@ import { shopifyFetch } from '@/utilities/shopifyFetch';
 
 export default async function POST(req:NextApiRequest, res: NextApiResponse) {
   try {
-        const {orderId, returnReason, customerNote}: {orderId: any, returnReason: any, customerNote?: string} = req.body;
+        const body = req.body || {};
+        const {orderId}: {orderId: any} = body.orderId? body.orderId.toString(): '';
+        const {reason}: {reason: any} = body.reason? body.reason.toString(): '';
+        const {custNote}: {custNote: any} = body.custNote? body.custNote.toString(): '';
         const fulfillmentsData = await getReturnableFulfillments(orderId);
         const returnLineItems:any = [];
 
@@ -15,8 +18,8 @@ export default async function POST(req:NextApiRequest, res: NextApiResponse) {
                 returnLineItems.push({
                     fulfillmentLineItemId: item.node.fulfillmentLineItem.id,
                     quantity: item.node.quantity,
-                    returnReason,
-                    customerNote
+                    reason,
+                    custNote
                 });
             });
         });
